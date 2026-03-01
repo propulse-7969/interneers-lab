@@ -11,17 +11,10 @@ from django.core.paginator import Paginator
 class ProductListCreate(APIView):
     
     def get(self, request):
-        products = Product.objects.all()
-        paginator = Paginator(products,3)
-        
-        page_number = request.GET.get('page')
-        if page_number is not None:
-            page_number = int(page_number)
-        
-        data = paginator.get_page(page_number)
-        serializer = ProductSerializer(data, many=True)
-        
+        product = Product.objects()
+        serializer = ProductSerializer(product, many=True)
         return Response(serializer.data)
+        
     
     def post(self, request):
         serializer = ProductSerializer(data = request.data)

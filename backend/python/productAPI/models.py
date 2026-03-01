@@ -1,13 +1,16 @@
-from django.db import models
+#from django.db import models
+
+import mongoengine as me
 
 # Create your models here.
-class Product(models.Model):
-    name=models.CharField(max_length=150)
-    description=models.TextField()
-    category=models.CharField(max_length=100)
-    price=models.DecimalField(max_digits=10, decimal_places=2)
-    brand=models.CharField(max_length=100)
-    quantity=models.PositiveIntegerField()
+class Product(me.Document):
+    name=me.StringField(max_length=150,required=True)
+    description=me.StringField()
+    category=me.StringField(max_length=100)
+    price=me.IntField(min_value=0)
+    brand=me.StringField(max_length=100)
+    quantity=me.IntField()
+    
     
     def __str__(self):
         return self.name
