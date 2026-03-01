@@ -12,7 +12,19 @@ class ProductListCreate(APIView):
     
     def get(self, request):
         product = Product.objects()
-        serializer = ProductSerializer(product, many=True)
+        paginator = Paginator(product, 2)
+        page_number = request.GET.get('page')
+        
+        if page_number is not None:
+            page_number = int(page_number)
+        else :
+            serializer = ProductSerializer(product, many=True)
+            return Response(serializer.data)
+        
+        page = paginator.get_page(page_number)
+        
+        serializer = ProductSerializer(page, many=True)
+        
         return Response(serializer.data)
         
     

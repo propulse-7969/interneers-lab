@@ -14,8 +14,12 @@ from pathlib import Path
 from mongoengine import connect
 
 connect(
-    db="products_database",
-    host="mongodb://127.0.0.1:27017/products_database"
+    db="product_database",
+    host="localhost",
+    username="root",
+    password="example",
+    port=27019,
+    authentication_source="admin"
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
