@@ -1,0 +1,43 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from ..services.product_service import ProductService
+from ..serializers.product_serializer import ProductSerializer
+
+class ProductDetailController(APIView):
+    
+    def put(self, request, product_id):
+        serializer = ProductSerializer(data=request.data)
+        
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        updated_product = ProductService.update_product(
+            product_id,
+            serializer.validated_data
+        )
+        
+        if not updated_product:
+            return Response(
+                {"error": "Product not found!"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        return Response(ProductSerializer(updated_product).data, status=status.HTTP_202_ACCEPTED)
+    
+    
+    
+    def delete(self, request, product_id):
+        deleted = ProductService.delete_product(product_id)
+        
+        if not deleted:
+            return Response(
+                {"error":"Product Not Found!"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        return Response(
+            {"message":"Delete Successful!"},
+            status=status.HTTP_204_NO_CONTENT
+        )
