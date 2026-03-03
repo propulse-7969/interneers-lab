@@ -4,8 +4,13 @@ from django.core.paginator import Paginator
 class ProductService:
     
     @staticmethod
-    def list_products(page_number=None):
+    def list_products(page_number=None, sortby="desc"):
         products=ProductRepository.get_all()
+        
+        if sortby == "asc":
+            products=products.order_by("updated_at")
+        else:
+            products=products.order_by("-updated_at")
         
         if page_number:
             paginator = Paginator(products,2)

@@ -8,8 +8,11 @@ class ProductListController(APIView):
     
     def get(self, request):
         page_number = request.GET.get("page")
+        sorting = request.GET.get("sortby","desc")
         
-        products = ProductService.list_products(page_number)
+        products = ProductService.list_products(page_number, sorting)
+        
+        
         
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
