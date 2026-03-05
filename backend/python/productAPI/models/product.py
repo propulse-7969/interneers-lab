@@ -3,6 +3,7 @@
 import mongoengine as me
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from .product_category import ProductCategory
 
 IST = ZoneInfo("Asia/Kolkata")
 
@@ -10,7 +11,7 @@ IST = ZoneInfo("Asia/Kolkata")
 class Product(me.Document):
     name=me.StringField(max_length=150,required=True)
     description=me.StringField()
-    category=me.StringField(max_length=100)
+    category=me.ReferenceField(ProductCategory)
     price=me.IntField(min_value=0)
     brand=me.StringField(max_length=100)
     quantity=me.IntField()

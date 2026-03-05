@@ -1,5 +1,5 @@
 from rest_framework_mongoengine import serializers
-from ..models import Product
+from productAPI.models import Product
 
 
 class ProductSerializer(serializers.DocumentSerializer):

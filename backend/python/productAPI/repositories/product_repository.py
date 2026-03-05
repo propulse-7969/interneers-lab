@@ -1,4 +1,4 @@
-from ..models import Product
+from productAPI.models import Product
 
 
 class ProductRepository:
@@ -10,6 +10,10 @@ class ProductRepository:
     @staticmethod
     def get_by_id(product_id):
         return Product.objects(id=product_id).first()
+    
+    @staticmethod
+    def get_products_by_category(category_id):
+        return Product.objects(category=category_id)
     
     @staticmethod
     def create(validated_data):

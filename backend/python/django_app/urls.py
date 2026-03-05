@@ -14,6 +14,6 @@ def hello_world(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_world),
-    path('api/product/',include("productAPI.urls")),
+    path('api/',include("productAPI.urls")),
     
 ]
