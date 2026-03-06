@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from ..services.product_service import ProductService
-from ..serializers.product_serializer import ProductSerializer
+from productAPI.services import ProductService
+from productAPI.serializers import ProductSerializer
 
 class ProductDetailController(APIView):
     

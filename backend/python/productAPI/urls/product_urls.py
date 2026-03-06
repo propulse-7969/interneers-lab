@@ -1,6 +1,6 @@
 from django.urls import path
-from ..controllers.product_list_controller import ProductListController
-from ..controllers.product_detail_controller import ProductDetailController
+from productAPI.controllers import ProductListController
+from productAPI.controllers import ProductDetailController
 
 urlpatterns = [
     path("product/", ProductListController.as_view()),
