@@ -1,4 +1,4 @@
-from ..repositories.product_repository import ProductRepository
+from productAPI.repositories import ProductRepository, ProductCategoryRepository
 from django.core.paginator import Paginator
 
 class ProductService:
@@ -45,4 +45,27 @@ class ProductService:
         return True
     
         
-    
+    @staticmethod
+    def assign_category(product_id, category_id):
+        product = ProductRepository.get_by_id(product_id)
+        category = ProductCategoryRepository.get_by_id(category_id)
+        
+        if product is None or category is None:
+            return False
+        
+        return ProductRepository.assign_category(product, category)
+        
+        
+        
+    @staticmethod
+    def unassign_category(product_id, category_id):
+        product = ProductRepository.get_by_id(product_id)
+        
+        if product is None:
+            return False
+        
+        return ProductRepository.unassign_category(product)
+        
+        
+        
+        

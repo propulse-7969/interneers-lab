@@ -1,5 +1,6 @@
 from .product_category_detail_controller import ProductCategoryDetailController
 from .product_category_list_controller import ProductCategoryListController
-from .category_product_controller import CategoryProductController
+from .category_product_list_controller import CategoryWiseProductListController
+from .category_product_detaill_controller import CategoryWiseProductDetailController
 from .product_list_controller import ProductListController
 from .product_detail_controller import ProductDetailController

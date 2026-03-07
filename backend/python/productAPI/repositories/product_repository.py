@@ -31,3 +31,15 @@ class ProductRepository:
     @staticmethod
     def delete(product):
         product.delete()
+        
+    @staticmethod
+    def assign_category(product, category):
+        product.category = category
+        product.save()
+        return True
+    
+    @staticmethod
+    def unassign_category(product):
+        setattr(product,"category",None)
+        product.save()
+        return True
