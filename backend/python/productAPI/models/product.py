@@ -13,7 +13,7 @@ class Product(me.Document):
     description=me.StringField()
     category=me.ReferenceField(ProductCategory)
     price=me.IntField(min_value=0)
-    brand=me.StringField(max_length=100)
+    brand=me.StringField(max_length=100, required=True)
     quantity=me.IntField()
     created_at=me.DateTimeField(default=datetime.now(IST))
     updated_at=me.DateTimeField(default=datetime.now(IST))

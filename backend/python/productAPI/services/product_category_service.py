@@ -1,11 +1,18 @@
 from productAPI.repositories import ProductCategoryRepository
 from productAPI.repositories import ProductRepository
+from django.core.paginator import Paginator
+
 
 class ProductCategoryService:
     
     @staticmethod
-    def get_categories():
+    def get_categories(page_number = None):
         categories = ProductCategoryRepository.get_all()
+        
+        if page_number:
+            paginator = Paginator(categories, 2)
+            page=paginator.get_page(page_number)
+            return page
         return categories
     
     @staticmethod

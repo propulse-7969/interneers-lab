@@ -7,10 +7,14 @@ from productAPI.serializers import ProductCategorySerializer
 class ProductCategoryListController(APIView):
     
     def get(self,request):
-        categories = ProductCategoryService.get_categories()
+        
+        page_number = request.GET.get("page")
+    
+        categories = ProductCategoryService.get_categories(page_number)
+        
         
         serializer = ProductCategorySerializer(categories, many=True)
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     
     def post(self, request):

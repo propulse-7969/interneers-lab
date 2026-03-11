@@ -1,5 +1,7 @@
 from productAPI.repositories import ProductRepository, ProductCategoryRepository
 from django.core.paginator import Paginator
+import csv
+from io import StringIO
 
 class ProductService:
     
@@ -68,4 +70,24 @@ class ProductService:
         
         
         
+    @staticmethod
+    def bulk_create_products(file):
         
+        file_decode = file.read().decode("utf-8")
+        io_string = StringIO(file_decode)
+        
+        reader = csv.DictReader(io_string)
+        
+        products_data = []
+        
+        for row in reader:
+            if not row.get("category"):
+                row["category"] = None
+            products_data.append(row)
+        
+        result = ProductRepository.bulk_insert(products_data)
+        if result is not False:
+            return {
+                "message": "Bulk Insert Successful!!",
+                "count": len(products_data)
+            }

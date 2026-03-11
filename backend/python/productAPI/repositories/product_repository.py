@@ -43,3 +43,10 @@ class ProductRepository:
         setattr(product,"category",None)
         product.save()
         return True
+    
+    @staticmethod
+    def bulk_insert(products_data):
+        products = [Product(**data) for data in products_data]
+        Product.objects.insert(products)
+        return True
+        
