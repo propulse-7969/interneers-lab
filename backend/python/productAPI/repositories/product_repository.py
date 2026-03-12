@@ -50,3 +50,29 @@ class ProductRepository:
         Product.objects.insert(products)
         return True
         
+    @staticmethod
+    def get_filtered(filters: dict):
+        queryset=Product.objects()
+        
+        categories = filters.get("categories")
+        if categories:
+            queryset=queryset.filter(category__in=categories)
+        
+        min_price = filters.get("min_price")
+        if min_price is not None:
+            queryset=queryset.filter(price__gte=min_price)
+            
+        max_price = filters.get("max_price")
+        if max_price is not None:
+            queryset=queryset.filter(price__lte=max_price)
+        
+        brand = filters.get("brand")
+        if brand:
+            queryset = queryset.filter(brand__icontains=brand)
+            
+        name=filters.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        
+        return queryset
+        

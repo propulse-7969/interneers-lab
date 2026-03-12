@@ -11,6 +11,9 @@ class ProductCategoryRepository:
     def get_by_id(category_id):
         return ProductCategory.objects(id=category_id).first()
     
+    @staticmethod
+    def get_by_title(category_title):
+        return ProductCategory.objects(title__iexact=category_title).first()
         
     @staticmethod
     def create(validated_data):

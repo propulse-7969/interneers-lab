@@ -6,8 +6,21 @@ from io import StringIO
 class ProductService:
     
     @staticmethod
-    def list_products(page_number=None, sortby="desc"):
-        products=ProductRepository.get_all()
+    def list_products(page_number=None, sortby="desc", filters=None):
+        
+        if filters:
+            category_names=filters.get("categories")
+            if category_names:
+                resolved_categories = []
+                for title in category_names:
+                    category = ProductCategoryRepository.get_by_title(title)
+                    if category:
+                        resolved_categories.append(category)
+                filters["categories"]=resolved_categories
+            
+            products=ProductRepository.get_filtered(filters)
+        else:
+            products=ProductRepository.get_all()
         
         if sortby == "asc":
             products=products.order_by("updated_at")
