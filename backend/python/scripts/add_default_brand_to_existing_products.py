@@ -23,7 +23,10 @@ def run():
         prod.save()
         count+=1
     
-    print(f"{count} products updates sucessfully!")
+    if count == 0:
+        print(f"Migration already performed earlier!")
+    else:
+        print(f"{count} products updates sucessfully!")
 
 if __name__ == "__main__":
     run()
