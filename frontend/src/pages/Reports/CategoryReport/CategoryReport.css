@@ -1,0 +1,12 @@
+.category-report-count-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.category-report-filter-row {
+  align-items: flex-end;
+}

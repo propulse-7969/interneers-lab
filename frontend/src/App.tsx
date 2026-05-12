@@ -11,6 +11,8 @@ import EditProduct from "./pages/Products/EditProduct";
 import Categories from "./pages/Categories/Categories";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
+import CategoryReport from "./pages/Reports/CategoryReport/CategoryReport";
+import ProductReport from "./pages/Reports/ProductReport/ProductReport";
 
 function App() {
   return (
@@ -30,6 +32,9 @@ function App() {
             path="/categories/:categoryId"
             element={<CategoryProducts />}
           />
+
+          <Route path="/reports/categories" element={<CategoryReport />} />
+          <Route path="/reports/products" element={<ProductReport />} />
         </Routes>
       </CategoryProvider>
     </>
