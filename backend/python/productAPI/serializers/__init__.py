@@ -1,3 +1,4 @@
 from .product_serializer import ProductSerializer
 from .category_serializer import ProductCategorySerializer
 from .product_filter_serializer import ProductFilterSerializer
+from .report_serializer import ReportSerializer

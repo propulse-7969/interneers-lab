@@ -5,3 +5,4 @@ from .category_wise_product_detail_controller import CategoryWiseProductDetailCo
 from .product_list_controller import ProductListController
 from .product_detail_controller import ProductDetailController
 from .product_bulk_controller import ProductBulkUploadController
+from .report_controller import ReportController
