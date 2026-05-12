@@ -1,0 +1,215 @@
+.product-form-page {
+  min-height: calc(100vh - var(--sp-nav-height));
+  padding: 24px 24px 40px;
+  max-width: 520px;
+  margin: 0 auto;
+  color: var(--sp-text);
+}
+
+.product-form-hero {
+  margin-bottom: 24px;
+}
+
+.product-form-back {
+  display: inline-flex;
+  margin: 0 0 12px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--sp-subdued);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.product-form-back:hover {
+  color: var(--sp-text);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.product-form-back:focus-visible {
+  outline: 2px solid var(--sp-green);
+  outline-offset: 2px;
+}
+
+.product-form-hero-title {
+  margin: 0 0 6px;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  color: var(--sp-text);
+}
+
+.product-form-hero-sub {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--sp-subdued);
+}
+
+.product-form-loading {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--sp-subdued);
+}
+
+.product-form-panel {
+  padding: 20px;
+  border-radius: 16px;
+  background-color: var(--sp-elevated);
+  border: 1px solid var(--sp-border);
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.product-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.product-form-label {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sp-subdued);
+}
+
+.product-form-label .optional {
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--sp-subdued);
+  opacity: 0.75;
+}
+
+.product-form input,
+.product-form textarea,
+.product-form select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--sp-border);
+  background-color: var(--sp-base);
+  color: var(--sp-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.product-form textarea {
+  border-radius: 14px;
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.product-form input::placeholder,
+.product-form textarea::placeholder {
+  color: var(--sp-subdued);
+}
+
+.product-form input:hover,
+.product-form textarea:hover,
+.product-form select:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+  outline: none;
+  border-color: var(--sp-green);
+  background-color: var(--sp-black);
+  box-shadow: 0 0 0 2px rgba(30, 215, 96, 0.2);
+}
+
+.product-form select {
+  padding-right: 36px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23b3b3b3' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.product-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.product-form-btn {
+  padding: 12px 22px;
+  border-radius: 9999px;
+  border: none;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.product-form-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.product-form-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.product-form-btn--primary {
+  background-color: var(--sp-green);
+  color: var(--sp-black);
+}
+
+.product-form-btn--primary:hover:not(:disabled) {
+  background-color: var(--sp-green-hover);
+}
+
+.product-form-btn--ghost {
+  background: transparent;
+  color: var(--sp-text);
+  border: 1px solid var(--sp-border);
+}
+
+.product-form-btn--ghost:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.product-form-btn:focus-visible {
+  outline: 2px solid var(--sp-green);
+  outline-offset: 2px;
+}
+
+.product-form-message {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sp-subdued);
+}
+
+.product-form-message--success {
+  color: var(--sp-green);
+}
+
+.product-form-message--error {
+  color: #ff6b7a;
+}

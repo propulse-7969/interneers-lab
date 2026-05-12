@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ProductCard from "../../components/Product/ProductCard";
 import { Product } from "../../types/Product";
 import { useCategories } from "../../context/CategoryContext";
@@ -7,6 +7,7 @@ import "./CategoryProducts.css";
 
 const CategoryProducts = () => {
   const { categoryId } = useParams();
+  const navigate = useNavigate();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +41,13 @@ const CategoryProducts = () => {
 
   return (
     <div className="category-products-container">
+      <button
+        type="button"
+        className="category-products-back"
+        onClick={() => navigate("/categories")}
+      >
+        ← Categories
+      </button>
       <h2>{category ? category.title : "Category"} Products</h2>
 
       <div className="products-grid">
