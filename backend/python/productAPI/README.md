@@ -1,6 +1,6 @@
 # Product API — Interneers Lab 2026
 
-A RESTful backend for managing warehouse products and product categories, built with **Django**, **MongoEngine**, and **Django REST Framework**, backed by **MongoDB**.
+A RESTful backend for managing warehouse products and product categories, with AI-powered inventory reporting. Built with **Django**, **MongoEngine**, and **Django REST Framework**, backed by **MongoDB**.
 
 ---
 
@@ -12,7 +12,8 @@ A RESTful backend for managing warehouse products and product categories, built 
 4. [Data Models](#data-models)
 5. [Product Endpoints](#product-endpoints)
 6. [Category Endpoints](#category-endpoints)
-7. [Scripts](#scripts)
+7. [Report Endpoints](#report-endpoints)
+8. [Scripts](#scripts)
 
 ---
 
@@ -24,6 +25,7 @@ A RESTful backend for managing warehouse products and product categories, built 
 | Database   | MongoDB (Docker, port 27019)|
 | ORM        | MongoEngine                 |
 | API        | Django REST Framework        |
+| AI         | Google Gemini 2.5 Flash     |
 | Dev Server | http://127.0.0.1:8001       |
 
 ---
@@ -40,7 +42,7 @@ Controller  →  Service  →  Repository  →  Model
 ```
 productAPI/
 ├── controllers/       # Handle HTTP requests/responses
-├── services/          # Business logic and orchestration  
+├── services/          # Business logic and orchestration
 ├── repositories/      # Database read/write operations
 ├── models/            # MongoEngine document schemas
 ├── serializers/       # Input validation and serialization
@@ -74,7 +76,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**4. Start the server**
+**4. Set environment variables**
+
+Create a `.env` file in `backend/python/` with:
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+**5. Start the server**
 ```bash
 python manage.py runserver 8001
 ```
@@ -87,26 +96,26 @@ On startup, the seed script auto-runs and creates default categories in MongoDB 
 
 ### Product
 
-| Field        | Type      | Required | Notes                              |
-|--------------|-----------|----------|------------------------------------|
-| id           | ObjectId  | auto     | MongoDB document ID                |
-| name         | String    | yes      | Max 150 characters                 |
-| description  | String    | no       |                                    |
-| category     | Reference | no       | References a ProductCategory       |
-| price        | Integer   | no       | Must be >= 0                       |
-| brand        | String    | yes      | Max 100 characters                 |
-| quantity     | Integer   | no       | Stock count                        |
-| created_at   | DateTime  | auto     | Set on first save (IST timezone)   |
+| Field        | Type      | Required | Notes                               |
+|--------------|-----------|----------|-------------------------------------|
+| id           | ObjectId  | auto     | MongoDB document ID                 |
+| name         | String    | yes      | Max 150 characters                  |
+| description  | String    | no       |                                     |
+| category     | Reference | no       | References a ProductCategory        |
+| price        | Integer   | no       | Must be >= 0                        |
+| brand        | String    | yes      | Max 100 characters                  |
+| quantity     | Integer   | no       | Stock count                         |
+| created_at   | DateTime  | auto     | Set on first save (IST timezone)    |
 | updated_at   | DateTime  | auto     | Updated on every save (IST timezone)|
 
 ### ProductCategory
 
-| Field       | Type     | Required | Notes              |
-|-------------|----------|----------|--------------------|
-| id          | ObjectId | auto     | MongoDB document ID|
-| title       | String   | yes      | Max 100 characters |
-| description | String   | no       |                    |
-| author      | String   | no       | Max 100 characters |
+| Field       | Type     | Required | Notes               |
+|-------------|----------|----------|---------------------|
+| id          | ObjectId | auto     | MongoDB document ID |
+| title       | String   | yes      | Max 100 characters  |
+| description | String   | no       |                     |
+| author      | String   | no       | Max 100 characters  |
 
 ---
 
@@ -119,15 +128,15 @@ List all products. Supports filtering, sorting, and pagination.
 
 **Query Parameters**
 
-| Param        | Type    | Description                                              |
-|--------------|---------|----------------------------------------------------------|
-| `page`       | Integer | Page number. Returns 2 per page                          |
-| `sortby`     | String  | `asc` or `desc` (default) — sorts by `updated_at`       |
+| Param        | Type    | Description                                                                |
+|--------------|---------|----------------------------------------------------------------------------|
+| `page`       | Integer | Page number. Returns 6 per page                                            |
+| `sortby`     | String  | `asc` or `desc` (default) — sorts by `updated_at`                         |
 | `categories` | String  | Comma-separated category **names**. Case-insensitive. Example: `Food,Electronics` |
-| `min_price`  | Integer | Minimum price (inclusive)                                |
-| `max_price`  | Integer | Maximum price (inclusive)                                |
-| `brand`      | String  | Partial, case-insensitive brand match                    |
-| `name`       | String  | Partial, case-insensitive name match                     |
+| `min_price`  | Integer | Minimum price (inclusive)                                                  |
+| `max_price`  | Integer | Maximum price (inclusive)                                                  |
+| `brand`      | String  | Partial, case-insensitive brand match                                      |
+| `name`       | String  | Partial, case-insensitive name match                                       |
 
 **Example requests**
 ```
@@ -230,6 +239,97 @@ Assign an existing product to a category. Does **not** create a new product.
 
 ### `DELETE /api/categories/{category_id}/products/{product_id}/`
 Unassign a product from a category — sets `category` to `null`. The product itself is **not** deleted.
+
+---
+
+## Report Endpoints
+
+Base path: `/api/report/`
+
+Report endpoints return structured data alongside an AI-generated analysis powered by **Google Gemini 2.5 Flash**. All responses follow this shape:
+
+```json
+{
+  "report": [ /* structured data array */ ],
+  "analysis": "Plain-text business analysis generated by AI"
+}
+```
+
+---
+
+### `GET /api/report/categories/`
+Returns a product count per category, with an AI-generated analysis of category-wise product variety and actionable suggestions.
+
+**Query Parameters**
+
+| Param       | Type    | Description                                           |
+|-------------|---------|-------------------------------------------------------|
+| `min_count` | Integer | Only include categories with at least this many products |
+| `max_count` | Integer | Only include categories with at most this many products  |
+
+**Example requests**
+```
+GET /api/report/categories/
+GET /api/report/categories/?min_count=5
+GET /api/report/categories/?min_count=2&max_count=10
+```
+
+**Example response**
+```json
+{
+  "report": [
+    {
+      "category": "Food",
+      "category_id": "65f1a2b3c4d5e6f7a8b9c0d1",
+      "product_count": 12
+    },
+    {
+      "category": "Electronics",
+      "category_id": "65f1a2b3c4d5e6f7a8b9c0d2",
+      "product_count": 5
+    }
+  ],
+  "analysis": "Food dominates the inventory with 12 products, suggesting strong stock variety..."
+}
+```
+
+---
+
+### `GET /api/report/products/`
+Returns all products whose quantity falls below a configurable threshold, with an AI-generated analysis of stock shortages and overstock risks.
+
+**Query Parameters**
+
+| Param       | Type    | Default | Description                                      |
+|-------------|---------|---------|--------------------------------------------------|
+| `threshold` | Integer | `8`     | Products with quantity strictly less than this value are included |
+
+**Example requests**
+```
+GET /api/report/products/
+GET /api/report/products/?threshold=20
+```
+
+**Example response**
+```json
+{
+  "report": [
+    {
+      "product_id": "65f1a2b3c4d5e6f7a8b9c0d3",
+      "product_name": "Cheese",
+      "product_quantity": 3
+    },
+    {
+      "product_id": "65f1a2b3c4d5e6f7a8b9c0d4",
+      "product_name": "Coffee",
+      "product_quantity": 6
+    }
+  ],
+  "analysis": "Two products are critically low on stock. Cheese at 3 units and Coffee at 6 units risk stockout..."
+}
+```
+
+> **Note:** The default threshold is defined in `productAPI/constants/constants.py` as `DEFAULT_THRESHOLD_VALUE = 8`. Update this value to change the system-wide default.
 
 ---
 
