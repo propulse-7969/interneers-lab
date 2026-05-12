@@ -16,7 +16,7 @@ class ProductFilterSerializer(serializers.Serializer):
         default = "desc"
     )    
     
-    page_number = serializers.IntegerField(default = 1)
+    page = serializers.IntegerField(default = 1)
     
     def validate(self, attrs):
         min_price = attrs.get("min_price")

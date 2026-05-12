@@ -49,6 +49,5 @@ class ProductDetailController(APIView):
             )
         
         return Response(
-            {"message":"Delete Successful!"},
             status=status.HTTP_204_NO_CONTENT
         )

@@ -18,8 +18,6 @@ class ProductListController(APIView):
             
         products = ProductService.list_products(filters)
         
-        
-        
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     

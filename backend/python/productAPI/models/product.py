@@ -7,7 +7,6 @@ from .product_category import ProductCategory
 
 IST = ZoneInfo("Asia/Kolkata")
 
-# Create your models here.
 class Product(me.Document):
     name=me.StringField(max_length=150,required=True)
     description=me.StringField()

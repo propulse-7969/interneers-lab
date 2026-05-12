@@ -3,6 +3,8 @@ from django.core.paginator import Paginator
 import csv
 from io import StringIO
 from productAPI.constants import DEFAULT_PRODUCT_PAGE_SIZE
+from productAPI.serializers import ProductSerializer
+
 
 class ProductService:
     
@@ -24,7 +26,7 @@ class ProductService:
             products=ProductRepository.get_all()
             
         sortby = filters.get("sortby", "desc")
-        page_number = filters.get("page_number", 1)
+        page_number = filters.get("page", 1)
         
         
         
@@ -104,34 +106,43 @@ class ProductService:
         
     @staticmethod
     def bulk_create_products(file):
-        
-        file_decode = file.read().decode("utf-8")
-        io_string = StringIO(file_decode)
-        
-        reader = csv.DictReader(io_string)
-        
-        required_headers = {'name', 'brand'}
-        
-        if not required_headers.issubset(reader.fieldnames):
-            raise ValueError(f"CSV missing required headers: {required_headers - set(reader.fieldnames)}")
 
-        for row_num, row in enumerate(reader, start=2):  
-            if not row.get('name') or not row.get('brand'):
-                raise ValueError(f"Row {row_num}: 'name' and 'brand' are required")
-            if row.get('price') and not row['price'].isdigit():
-                raise ValueError(f"Row {row_num}: 'price' must be a number")        
-                
-        
-        products_data = []
-        
-        for row in reader:
+        file_decode = file.read().decode("utf-8-sig")
+        io_string = StringIO(file_decode)
+
+        reader = csv.DictReader(io_string)
+
+        if not reader.fieldnames:
+            raise ValueError("CSV is empty")
+
+        rows = list(reader)
+
+        for row in rows:
+
             if not row.get("category"):
                 row["category"] = None
-            products_data.append(row)
-        
-        result = ProductRepository.bulk_insert(products_data)
+
+            if row.get("price"):
+                row["price"] = int(row["price"])
+
+            if row.get("quantity"):
+                row["quantity"] = int(row["quantity"])
+
+        serializer = ProductSerializer(
+            data=rows,
+            many=True
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        result = ProductRepository.bulk_insert(
+            serializer.validated_data
+        )
+
         if result is not False:
             return {
-                "message": "Bulk Insert Successful!!",
-                "count": len(products_data)
+                "message": "Bulk Insert Successful!",
+                "count": len(serializer.validated_data)
             }
+
+        return False
