@@ -23,3 +23,12 @@ class ReportService:
         
         return result
         
+    @staticmethod
+    def get_product_below_threshold(threshold):
+        
+        data = ReportRepository.get_low_quantity_products(threshold)
+        
+        return data
+        
+        
+    
