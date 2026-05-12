@@ -4,11 +4,12 @@ from rest_framework import serializers
 class ProductFilterSerializer(serializers.Serializer):
     category = serializers.CharField(required=False)
     brand = serializers.CharField(required=False)
+    name = serializers.CharField(required=False)
     
     min_price = serializers.FloatField(required=False, min_value = 0)
     max_price = serializers.FloatField(required=False, min_value = 0)
       
-    sort_by = serializers.ChoiceField(
+    sortby = serializers.ChoiceField(
         choices=[
             "desc",
             "asc",

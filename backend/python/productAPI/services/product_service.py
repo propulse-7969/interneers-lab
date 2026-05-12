@@ -1,5 +1,5 @@
 from productAPI.repositories import ProductRepository, ProductCategoryRepository
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import csv
 from io import StringIO
 from productAPI.constants import DEFAULT_PRODUCT_PAGE_SIZE
@@ -24,21 +24,24 @@ class ProductService:
             products=ProductRepository.get_filtered(filters)
         else:
             products=ProductRepository.get_all()
-            
-        sortby = filters.get("sortby", "desc")
-        page_number = filters.get("page", 1)
-        
-        
-        
+
+        f = filters or {}
+        sortby = f.get("sortby", "desc")
+        page_number = f.get("page", 1)
+
         if sortby == "asc":
             products=products.order_by("updated_at")
         else:
             products=products.order_by("-updated_at")
-        
+
         if page_number:
             paginator = Paginator(products,DEFAULT_PRODUCT_PAGE_SIZE)
-            page=paginator.get_page(page_number)
-            return page
+            try:
+                return paginator.page(page_number)
+            except PageNotAnInteger:
+                return paginator.page(1)
+            except EmptyPage:
+                return []
 
         return products
     

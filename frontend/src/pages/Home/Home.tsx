@@ -2,37 +2,44 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
+const LOGO_SRC = `${process.env.PUBLIC_URL ?? ""}/stockify.png`;
+
 const Home = () => {
   const navigate = useNavigate();
   return (
     <div className="home-container">
       <div className="home-card">
-        <h1>Welcome to ProductAPI Dashboard!</h1>
-
-        <p>
-          This is a full-stack warehouse management system built using{" "}
-          <strong>Django</strong>, <strong>MongoDB</strong>, and{" "}
-          <strong>React</strong>.
-        </p>
-
-        <p>
-          You can explore products, filter and sort them, manage categories, and
-          dynamically assign products to categories using REST APIs.
+        <div className="home-brand-lockup">
+          <img
+            className="home-logo"
+            src={LOGO_SRC}
+            alt=""
+            width={100}
+            height={100}
+            decoding="async"
+          />
+          <p className="home-kicker">Warehouse inventory</p>
+          <h1 className="home-title">Stockify</h1>
+        </div>
+        <p className="home-lead">
+          Stockify is a simple and easy to use warehouse inventory system with
+          AI powered Insights.
         </p>
 
         <div className="home-buttons">
           <button
+            type="button"
             className="home-btn primary"
             onClick={() => navigate("/products")}
           >
-            View Products
+            Products
           </button>
-
           <button
+            type="button"
             className="home-btn secondary"
             onClick={() => navigate("/categories")}
           >
-            View Categories
+            Categories
           </button>
         </div>
       </div>

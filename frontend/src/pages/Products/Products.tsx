@@ -10,6 +10,7 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [sort, setSort] = useState<"asc" | "desc">("desc");
   const [loading, setLoading] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   const [page, setPage] = useState(1);
 
@@ -24,6 +25,7 @@ const Products = () => {
     setLoading(true);
     try {
       const query = new URLSearchParams();
+      const nextPageQuery = new URLSearchParams();
 
       query.append("sortby", sort);
       query.append("page", page.toString());
@@ -35,6 +37,19 @@ const Products = () => {
 
       const res = await fetch(`${PRODUCT_URL}?${query.toString()}`);
       const data = await res.json();
+
+      nextPageQuery.append("sortby", sort);
+      nextPageQuery.append("page", (page + 1).toString());
+      if (name) nextPageQuery.append("name", name);
+      if (brand) nextPageQuery.append("brand", brand);
+      if (minPrice) nextPageQuery.append("min_price", minPrice.toString());
+      if (maxPrice !== null)
+        nextPageQuery.append("max_price", maxPrice.toString());
+      const nextPageUrl = `${PRODUCT_URL}?${nextPageQuery.toString()}`;
+      const nextPageRes = await fetch(nextPageUrl);
+      const nextPageData = await nextPageRes.json();
+
+      setHasNextPage(nextPageData.length > 0);
 
       setProducts(data);
     } catch (err) {
@@ -56,60 +71,76 @@ const Products = () => {
   }, [name, brand, minPrice, maxPrice]);
 
   if (loading || categoryLoading) {
-    return <p className="loading">Loading products...</p>;
+    return (
+      <div className="products-page">
+        <p className="products-loading">Loading products…</p>
+      </div>
+    );
   }
 
   return (
-    <div className="products-container">
-      <div className="products-header">
-        <h2>All Products</h2>
+    <div className="products-page">
+      <header className="products-hero">
+        <h1 className="products-hero-title">Products</h1>
+        <p className="products-hero-sub">
+          Search, filter by price, and sort like a playlist — but for inventory.
+        </p>
+      </header>
 
-        <div className="controls">
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as "asc" | "desc")}
-          >
-            <option value="desc">Newest First</option>
-            <option value="asc">Oldest First</option>
-          </select>
-
-          <div className="filter-form">
-            <input
-              type="text"
-              placeholder="Search name..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Search brand..."
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            />
-
-            <input
-              type="number"
-              placeholder="Min ₹"
-              value={minPrice}
-              onChange={(e) => setMinprice(Number(e.target.value))}
-            />
-
-            <input
-              type="number"
-              placeholder="Max ₹"
-              value={maxPrice ?? ""}
-              onChange={(e) =>
-                setMaxprice(e.target.value ? Number(e.target.value) : null)
-              }
-            />
+      <section className="products-toolbar" aria-label="Filters and sort">
+        <div className="products-toolbar-row">
+          <div className="products-sort">
+            <label htmlFor="products-sort">Sort</label>
+            <select
+              id="products-sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as "asc" | "desc")}
+            >
+              <option value="desc">Newest first</option>
+              <option value="asc">Oldest first</option>
+            </select>
           </div>
         </div>
-      </div>
+
+        <div className="filter-form">
+          <input
+            type="search"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            aria-label="Filter by product name"
+          />
+          <input
+            type="search"
+            placeholder="Brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            aria-label="Filter by brand"
+          />
+          <input
+            type="number"
+            placeholder="Min ₹"
+            value={minPrice || ""}
+            onChange={(e) =>
+              setMinprice(e.target.value === "" ? 0 : Number(e.target.value))
+            }
+            aria-label="Minimum price"
+          />
+          <input
+            type="number"
+            placeholder="Max ₹"
+            value={maxPrice ?? ""}
+            onChange={(e) =>
+              setMaxprice(e.target.value ? Number(e.target.value) : null)
+            }
+            aria-label="Maximum price"
+          />
+        </div>
+      </section>
 
       <div className="products-grid">
         {products.length === 0 ? (
-          <p className="no-products">No products found.</p>
+          <p className="products-empty">No products found.</p>
         ) : (
           products.map((p) => (
             <ProductCard
@@ -123,23 +154,23 @@ const Products = () => {
         )}
       </div>
 
-      <div className="pagination">
+      <nav className="pagination" aria-label="Pagination">
         <button
+          type="button"
           disabled={page === 1}
           onClick={() => setPage((prev) => prev - 1)}
         >
-          ← Prev
+          Previous
         </button>
-
         <span>Page {page}</span>
-
         <button
-          disabled={products.length === 0}
+          type="button"
+          disabled={!hasNextPage}
           onClick={() => setPage((prev) => prev + 1)}
         >
-          Next →
+          Next
         </button>
-      </div>
+      </nav>
     </div>
   );
 };

@@ -22,12 +22,12 @@ class ProductListController(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = ProductSerializer(data=request.data) #this ones to valiidate json
+        serializer = ProductSerializer(data=request.data) 
         
         if serializer.is_valid():
             product = ProductService.create_product(serializer.validated_data)
             return Response(
-                ProductSerializer(product).data, #this to convert object to json
+                ProductSerializer(product).data, 
                 status=status.HTTP_201_CREATED
             )
         
