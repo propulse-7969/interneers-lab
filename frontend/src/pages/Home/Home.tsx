@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import ColorBends from "../../components/ReactBits/ColorBends";
 import "./Home.css";
 
 const LOGO_SRC = `${process.env.PUBLIC_URL ?? ""}/stockify.png`;
@@ -8,6 +9,19 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <div className="home-container">
+      <div className="home-bends" aria-hidden>
+        <ColorBends
+          transparent
+          rotation={72}
+          speed={0.18}
+          autoRotate={0.04}
+          scale={1.05}
+          colors={["#1ed760", "#121212", "#169c46", "#282828", "#1fdf64"]}
+          mouseInfluence={0.35}
+          parallax={0.4}
+          noise={0.2}
+        />
+      </div>
       <div className="home-card">
         <div className="home-brand-lockup">
           <img

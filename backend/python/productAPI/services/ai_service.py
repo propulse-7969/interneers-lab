@@ -1,27 +1,56 @@
 import os
 from dotenv import load_dotenv
+from groq import Groq
 
-import google.generativeai as genai
 
 load_dotenv()
 
+
 class AIService:
-    
-    genai.configure(
+
+    client = Groq(
         api_key=os.getenv(
-            "GEMINI_API_KEY"
+            "GROQ_API_KEY"
         )
     )
-    
-    model = genai.GenerativeModel(
-        "gemini-2.5-flash"
-    )
-    
+
+
+    MODEL = "llama-3.3-70b-versatile"
+
+
+    @staticmethod
+    def _generate(prompt):
+
+        response = (
+            AIService
+            .client
+            .chat
+            .completions
+            .create(
+                model=AIService.MODEL,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0.5,
+                max_tokens=200
+            )
+        )
+
+        return (
+            response
+            .choices[0]
+            .message
+            .content
+        )
+
+
     @staticmethod
     def generate_category_report_analysis(data):
-    
-        prompt = f"""
 
+        prompt = f"""
         Analyze this inventory data.
 
         {data}
@@ -30,28 +59,21 @@ class AIService:
         provide a concise business
         analysis of:
 
-        1. Category wise product variety 
+        1. Category wise product variety
         2. Actionable suggestions
 
         Return plain text only.
-
         """
 
-        response = (
-            AIService
-            .model
-            .generate_content(
-                prompt
-            )
+        return AIService._generate(
+            prompt
         )
 
-        return response.text    
-    
+
     @staticmethod
     def generate_product_report_analysis(data):
-    
-        prompt = f"""
 
+        prompt = f"""
         Analyze this inventory data.
 
         {data}
@@ -65,15 +87,8 @@ class AIService:
         3. Actionable suggestions
 
         Return plain text only.
-
         """
 
-        response = (
-            AIService
-            .model
-            .generate_content(
-                prompt
-            )
+        return AIService._generate(
+            prompt
         )
-
-        return response.text    
