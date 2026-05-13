@@ -25,7 +25,7 @@ A RESTful backend for managing warehouse products and product categories, with A
 | Database   | MongoDB (Docker, port 27019)|
 | ORM        | MongoEngine                 |
 | API        | Django REST Framework        |
-| AI         | Google Gemini 2.5 Flash     |
+| AI         | Groq — Llama 3.3 70B Versatile |
 | Dev Server | http://127.0.0.1:8001       |
 
 ---
@@ -80,7 +80,7 @@ pip install -r requirements.txt
 
 Create a `.env` file in `backend/python/` with:
 ```
-GEMINI_API_KEY=your_gemini_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 ```
 
 **5. Start the server**
@@ -246,7 +246,7 @@ Unassign a product from a category — sets `category` to `null`. The product it
 
 Base path: `/api/report/`
 
-Report endpoints return structured data alongside an AI-generated analysis powered by **Google Gemini 2.5 Flash**. All responses follow this shape:
+Report endpoints return structured data alongside an AI-generated analysis powered by **Groq (Llama 3.3 70B Versatile)**. All responses follow this shape:
 
 ```json
 {
