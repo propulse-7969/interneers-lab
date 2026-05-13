@@ -81,7 +81,29 @@ const Products = () => {
   return (
     <div className="products-page">
       <header className="products-hero">
-        <h1 className="products-hero-title">Products</h1>
+        <div className="products-hero-top">
+          <h1 className="products-hero-title">Products</h1>
+          <nav
+            className="pagination products-hero-pagination"
+            aria-label="Pagination"
+          >
+            <button
+              type="button"
+              disabled={page === 1}
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              Previous
+            </button>
+            <span>Page {page}</span>
+            <button
+              type="button"
+              disabled={!hasNextPage}
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              Next
+            </button>
+          </nav>
+        </div>
         <p className="products-hero-sub">
           Search, filter by price, and sort like a playlist — but for inventory.
         </p>
@@ -154,23 +176,6 @@ const Products = () => {
         )}
       </div>
 
-      <nav className="pagination" aria-label="Pagination">
-        <button
-          type="button"
-          disabled={page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-        >
-          Previous
-        </button>
-        <span>Page {page}</span>
-        <button
-          type="button"
-          disabled={!hasNextPage}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          Next
-        </button>
-      </nav>
     </div>
   );
 };
