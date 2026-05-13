@@ -9,6 +9,8 @@ import Products from "./pages/Products/Products";
 import CreateProduct from "./pages/Products/CreateProduct";
 import EditProduct from "./pages/Products/EditProduct";
 import Categories from "./pages/Categories/Categories";
+import AddCategory from "./pages/Categories/AddCategory";
+import EditCategory from "./pages/Categories/EditCategory";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import CategoryProducts from "./pages/CategoryProducts/CategoryProducts";
 import CategoryReport from "./pages/Reports/CategoryReport/CategoryReport";
@@ -28,6 +30,11 @@ function App() {
           <Route path="/products/:id/edit" element={<EditProduct />} />
 
           <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/create" element={<AddCategory />} />
+          <Route
+            path="/categories/:categoryId/edit"
+            element={<EditCategory />}
+          />
           <Route
             path="/categories/:categoryId"
             element={<CategoryProducts />}

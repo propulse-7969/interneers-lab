@@ -144,9 +144,9 @@ const CreateProduct = () => {
             <button
               type="button"
               className="product-form-btn product-form-btn--primary"
-              onClick={() => navigate("/categories")}
+              onClick={() => navigate("/categories/create")}
             >
-              Go to categories
+              Add a category
             </button>
           </div>
         </div>

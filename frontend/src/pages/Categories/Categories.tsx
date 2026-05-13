@@ -31,10 +31,22 @@ const Categories = () => {
   return (
     <div className="categories-page">
       <header className="categories-hero">
-        <h1 className="categories-hero-title">Categories</h1>
-        <p className="categories-hero-sub">
-          Browse shelves by aisle — tap a tile to see products in that category.
-        </p>
+        <div className="categories-hero-top">
+          <div className="categories-hero-text">
+            <h1 className="categories-hero-title">Categories</h1>
+            <p className="categories-hero-sub">
+              Browse shelves by aisle — tap a tile to see products in that
+              category.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="categories-add-btn"
+            onClick={() => navigate("/categories/create")}
+          >
+            Add category
+          </button>
+        </div>
       </header>
 
       <div className="categories-grid">
